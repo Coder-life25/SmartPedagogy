@@ -1,30 +1,33 @@
-import React from "react";
-import { Link } from "react-router";
+import axios from "axios";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router";
+import { BASE_URL } from "../utils/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser } from "../utils/appSlice";
+import Teachers from "../pages/teachers/Teachers";
+import Students from "../pages/students/Students";
 const Body = () => {
-  return (
-    <div className="mx-10 my-10 flex ">
-      <Link to={"/classroomOverview"}>
-        <div className="w-96 h-56 bg-gray-300 rounded-lg text-center py-20 mx-10 my-5 text-2xl font-bold cursor-pointer">
-          Classroom Overview
-        </div>
-      </Link>
-      <Link to={"/assignmentSection"}>
-        <div className="w-96 h-56 bg-gray-300 rounded-lg text-center py-20 mx-10 my-5 text-2xl font-bold cursor-pointer">
-          Assignment Section
-        </div>
-      </Link>
-      <Link to={"/feedbackInsights"}>
-        <div className="w-96 h-56 bg-gray-300 rounded-lg text-center py-20 mx-10 my-5 text-2xl font-bold cursor-pointer">
-          Feedback Insights
-        </div>
-      </Link>
-      <Link to={"/classroomOverview"}> 
-        <div className="w-96 h-56 bg-gray-300 rounded-lg text-center py-20 mx-10 my-5 text-2xl font-bold cursor-pointer">
-          plagarism Integrity Reports
-        </div>
-      </Link>
-    </div>
-  );
+  const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userProfile = async () => {
+    try {
+      let res = await axios.get(BASE_URL + "/profile/view", {
+        withCredentials: true,
+      });
+      dispatch(addUser(res.data));
+      // console.log(res.data);
+    } catch (err) {
+      navigate("/login");
+      console.log(err.message);
+    }
+  };
+
+  useEffect(() => {
+    !user && userProfile();
+  }, []);
+
+  return <>{user?.role === "teacher" ? <Teachers /> : <Students />}</>;
 };
 
 export default Body;
