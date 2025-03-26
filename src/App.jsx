@@ -9,6 +9,11 @@ import PlagarismIntegriryReport from "./pages/teachers/PlagarismIntegriryReport"
 import Body from "./components/Body";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
+import DashboardOverview from "./pages/students/DashboardOverview";
+import TotalAssignments from "./pages/students/TotalAssignments";
+import FeedbackAndScore from "./pages/students/FeedbackAndScore";
+import PlagiarismCheckResults from "./pages/students/PlagiarismCheckResults";
+import AssignmentSubmission from "./pages/students/AssignmentSubmission";
 function App() {
   const AppLayout = () => {
     return (
@@ -38,8 +43,25 @@ function App() {
               />
               <Route path="/feedbackInsights" element={<FeedbackInsights />} />
               <Route
-                path="/plagarismIntegrityReports"
+                path="/plagarismIntegrityReport"
                 element={<PlagarismIntegriryReport />}
+              />
+
+              {/** students Route */}
+
+              <Route
+                path="/dashboardOverview"
+                element={<DashboardOverview />}
+              />
+              <Route path="/totalAssignments" element={<TotalAssignments />} />
+              <Route path="/feedbackAndScore" element={<FeedbackAndScore />} />
+              <Route
+                path="/plagiarismCheckResults"
+                element={<PlagiarismCheckResults />}
+              />
+              <Route
+                path="/assignment/:id"
+                element={<AssignmentSubmission />}
               />
             </Route>
           </Routes>
