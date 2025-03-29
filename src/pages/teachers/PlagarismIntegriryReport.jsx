@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const PlagarismIntegriryReport = () => {
-  return (
-    <div>
-      PlagarismIntegriryReport
-    </div>
-  )
-}
+  return <div>PlagarismIntegriryReport</div>;
+};
 
-export default PlagarismIntegriryReport
+export default PlagarismIntegriryReport;

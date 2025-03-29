@@ -43,7 +43,7 @@ function App() {
               />
               <Route path="/feedbackInsights" element={<FeedbackInsights />} />
               <Route
-                path="/plagarismIntegrityReport"
+                path="/plagiarismIntegrityReport"
                 element={<PlagarismIntegriryReport />}
               />
 
