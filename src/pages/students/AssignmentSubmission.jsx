@@ -64,6 +64,7 @@ const AssignmentSubmission = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!file || !base64File) {
       alert("Please select a file to submit.");
       return;
@@ -76,7 +77,8 @@ const AssignmentSubmission = () => {
     };
 
     try {
-      const res = await axios.post(
+      // Step 1: Submit the assignment
+      const uploadRes = await axios.post(
         `${BASE_URL}/api/submissions/upload`,
         submissionData,
         {
@@ -85,11 +87,38 @@ const AssignmentSubmission = () => {
         }
       );
 
+      console.log("Assignment submitted:", uploadRes.data);
       alert("Assignment submitted successfully!");
-      console.log(res.data);
+
+      // Step 2: Get submissionId using assignmentId
+      const submissionIdRes = await axios.get(
+        `${BASE_URL}/api/submissions/getSubmissionId/${assignmentId}`,
+        { withCredentials: true }
+      );
+
+      const submissionId = submissionIdRes.data.submissionId;
+      console.log("Retrieved Submission ID:", submissionId);
+
+      if (!submissionId) {
+        alert("Failed to retrieve submission ID.");
+        return;
+      }
+
+      // Step 3: Analyze the assignment
+      const analyzeRes = await axios.post(
+        `${BASE_URL}/api/check/analyze/assignment`,
+        { submissionId },
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      console.log("Assignment analysis response:", analyzeRes.data);
+      alert("Assignment analyzed successfully!");
     } catch (error) {
-      console.error("Error submitting assignment", error);
-      alert("Failed to submit assignment");
+      console.error("Error:", error);
+      alert("Something went wrong. Please try again.");
     }
   };
 

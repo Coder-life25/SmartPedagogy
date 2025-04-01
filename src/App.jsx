@@ -31,6 +31,7 @@ function App() {
           withCredentials: true,
         });
         dispatch(addUser(res.data));
+        navigate("/");
         // console.log(res.data);
       } catch (err) {
         navigate("/login");
