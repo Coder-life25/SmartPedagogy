@@ -14,8 +14,35 @@ import TotalAssignments from "./pages/students/TotalAssignments";
 import FeedbackAndScore from "./pages/students/FeedbackAndScore";
 import PlagiarismCheckResults from "./pages/students/PlagiarismCheckResults";
 import AssignmentSubmission from "./pages/students/AssignmentSubmission";
+import { addUser } from "../src/utils/appSlice";
+import { Link, useNavigate } from "react-router";
+import { BASE_URL } from "../src/utils/constants";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { useEffect } from "react";
 function App() {
   const AppLayout = () => {
+    const user = useSelector((store) => store.user);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const userProfile = async () => {
+      try {
+        let res = await axios.get(BASE_URL + "/profile/view", {
+          withCredentials: true,
+        });
+        dispatch(addUser(res.data));
+        // console.log(res.data);
+      } catch (err) {
+        navigate("/login");
+        console.log(err.message);
+      }
+    };
+
+    useEffect(() => {
+      !user && userProfile();
+    }, []);
+
+    console.log("appLayout called");
     return (
       <div>
         <NavBar />

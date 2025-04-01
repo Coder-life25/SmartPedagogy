@@ -32,9 +32,15 @@ const NavBar = () => {
     <nav className="bg-gradient-to-r from-blue-900 to-blue-700 shadow-md p-4">
       <div className="container mx-auto flex items-center justify-between ml-2">
         {/* Logo / Brand Name */}
-        <Link to={"/"} className="text-white text-2xl font-bold w-1/4">
-          SmartPedagogy
-        </Link>
+        {user ? (
+          <Link to={"/"} className="text-white text-2xl font-bold w-1/4">
+            SmartPedagogy
+          </Link>
+        ) : (
+          <Link to={"/login"} className="text-white text-2xl font-bold w-1/4">
+            SmartPedagogy
+          </Link>
+        )}
 
         {/* Search Bar */}
         <div className="hidden md:block w-4/5 mx-10">
