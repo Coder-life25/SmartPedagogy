@@ -1,11 +1,17 @@
-import React from 'react'
+import React from "react";
+import PerformanceGraph from "../../components/PerformanceGraph";
+import { useSelector } from "react-redux";
 
 const DashboardOverview = () => {
+  const user = useSelector((store) => store.user);
+
+  if (!user) return;
+
   return (
     <div>
-      DashboardOverview
+      <PerformanceGraph studentId={user._id} />
     </div>
-  )
-}
+  );
+};
 
-export default DashboardOverview
+export default DashboardOverview;
