@@ -63,7 +63,7 @@ const NavBar = () => {
               className="focus:outline-none"
             >
               <img
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                src={user.profilePic}
                 alt="User Avatar"
                 className="w-10 h-10 rounded-full border-2 border-white"
               />
@@ -72,9 +72,12 @@ const NavBar = () => {
             {/* Dropdown Menu */}
             {isOpen && (
               <ul className="absolute right-0 mt-9 w-40 bg-white rounded-lg shadow-lg text-gray-700 p-2 space-y-2">
-                <li className="hover:bg-gray-200 p-2 rounded-md cursor-pointer">
+                <Link
+                  to={"/profile"}
+                  className="hover:bg-gray-200 p-2 rounded-md cursor-pointer"
+                >
                   Profile
-                </li>
+                </Link>
                 <li className="hover:bg-gray-200 p-2 rounded-md cursor-pointer">
                   Settings
                 </li>

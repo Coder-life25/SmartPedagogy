@@ -20,6 +20,7 @@ import { BASE_URL } from "../src/utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useEffect } from "react";
+import Profile from "./components/Profile";
 function App() {
   const AppLayout = () => {
     const user = useSelector((store) => store.user);
@@ -61,6 +62,7 @@ function App() {
               <Route path="/" element={<Body />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/profile" element={<Profile />} />
               <Route
                 path="/assignmentSection"
                 element={<AssignmentSection />}
