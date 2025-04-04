@@ -22,8 +22,8 @@ const PerformanceGraph = ({ studentId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(BASE_URL + 
-          `/api/performance/student/${studentId}`
+        const response = await axios.get(
+          BASE_URL + `/api/performance/student/${studentId}`
         );
         setPerformanceData(response.data);
         console.log(response.data);

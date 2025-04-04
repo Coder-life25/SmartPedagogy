@@ -80,8 +80,7 @@ const AssignmentSection = () => {
           placeholder="Enter assignment title"
           className="border p-2 rounded w-full"
         />
-        <input
-          type="text"
+        <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter assignment description"

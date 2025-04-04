@@ -50,6 +50,7 @@ const TotalAssignments = () => {
         }
       );
       setSubmittedAssignments(response.data);
+      console.log(response.data);
       dispatch(addSubmittedAssignment(response.data));
     } catch (error) {
       console.error("Error fetching submitted assignments", error);
@@ -106,18 +107,20 @@ const TotalAssignments = () => {
             </h3>
             {showSubmittedAssignments && (
               <ul className="space-y-2 w-1/2">
-                {submittedAssignments.map((assignment) => (
-                  <li
-                    key={assignment.assignmentId}
-                    className="border p-3 rounded bg-green-100"
-                  >
-                    <h3>{assignment.title}</h3>
-                    <p>
-                      Submitted on:{" "}
-                      {new Date(assignment.createdAt).toDateString()}
-                    </p>
-                  </li>
-                ))}
+                {submittedAssignments.map((assignment) =>
+                  assignment ? (
+                    <li
+                      key={assignment.assignmentId}
+                      className="border p-3 rounded bg-green-100"
+                    >
+                      <h3>{assignment.title}</h3>
+                      <p>
+                        Submitted on:{" "}
+                        {new Date(assignment.createdAt).toDateString()}
+                      </p>
+                    </li>
+                  ) : null
+                )}
               </ul>
             )}
           </div>
@@ -132,22 +135,24 @@ const TotalAssignments = () => {
             </h3>
             {showPendingAssignments && (
               <ul className="space-y-2 w-1/2">
-                {pendingAssignments.map((assignment) => (
-                  <li
-                    key={assignment._id}
-                    className="border p-3 rounded bg-red-100"
-                  >
-                    <h3>{assignment.title}</h3>
-                    <p>
-                      Due Date: {new Date(assignment.dueDate).toDateString()}
-                    </p>
-                    <Link to={`/assignment/${assignment._id}`}>
-                      <button className="my-2 cursor-pointer bg-blue-500 text-white rounded-lg px-4 py-2">
-                        Submit Now
-                      </button>
-                    </Link>
-                  </li>
-                ))}
+                {pendingAssignments.map((assignment) =>
+                  assignment ? (
+                    <li
+                      key={assignment._id}
+                      className="border p-3 rounded bg-red-100"
+                    >
+                      <h3>{assignment.title}</h3>
+                      <p>
+                        Due Date: {new Date(assignment.dueDate).toDateString()}
+                      </p>
+                      <Link to={`/assignment/${assignment._id}`}>
+                        <button className="my-2 cursor-pointer bg-blue-500 text-white rounded-lg px-4 py-2">
+                          Submit Now
+                        </button>
+                      </Link>
+                    </li>
+                  ) : null
+                )}
               </ul>
             )}
           </div>
