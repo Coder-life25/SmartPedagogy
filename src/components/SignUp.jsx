@@ -1,13 +1,31 @@
+import axios from "axios";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { BASE_URL } from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/appSlice";
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("student");
-
-  const handleSignup = (e) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleSignup = async (e) => {
     e.preventDefault();
-    console.log({ name, email, password, role });
+
+    try {
+      let res = await axios.post(
+        BASE_URL + "/signup",
+        { name, email, password, role },
+        { withCredentials: true }
+      );
+      console.log(res.data.user);
+      dispatch(addUser(res.data.user));
+      navigate("/");
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   return (
@@ -51,6 +69,10 @@ const Signup = () => {
       >
         Signup
       </button>
+
+      <Link to={"/login"}>
+        <p className="py-2">Already have a Account? <u>Click here</u></p>
+      </Link>
     </form>
   );
 };

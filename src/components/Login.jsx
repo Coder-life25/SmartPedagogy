@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { addUser } from "../utils/appSlice";
+import { Link } from "react-router";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -56,6 +57,11 @@ const Login = () => {
       >
         Login
       </button>
+      <Link to={"/signup"}>
+        <p className="py-2 ">
+          Don't have a account? <u>SignUp here</u>
+        </p>
+      </Link>
     </form>
   );
 };
