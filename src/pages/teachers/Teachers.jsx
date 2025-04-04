@@ -19,11 +19,11 @@ const Teachers = () => {
             Feedback Insights
           </div>
         </Link>
-        <Link to={"/plagiarismIntegrityReport"}>
+        {/* <Link to={"/plagiarismIntegrityReport"}>
           <div className="w-96 h-56 bg-gray-300 rounded-lg text-center py-20 mx-10 my-5 text-2xl font-bold cursor-pointer">
             plagarism Integrity Report
           </div>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
