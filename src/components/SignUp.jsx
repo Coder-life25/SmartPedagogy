@@ -71,7 +71,9 @@ const Signup = () => {
       </button>
 
       <Link to={"/login"}>
-        <p className="py-2">Already have a Account? <u>Click here</u></p>
+        <p className="py-2">
+          Already have a Account? <u>Click here</u>
+        </p>
       </Link>
     </form>
   );
