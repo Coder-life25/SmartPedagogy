@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { BASE_URL } from "../utils/constants";
 
 const StudentFeedback = ({ studentId }) => {
   const [feedbackData, setFeedbackData] = useState([]);
@@ -19,16 +20,14 @@ const StudentFeedback = ({ studentId }) => {
       try {
         // Fetch feedback data
         const feedbackResponse = await axios.get(
-          `http://localhost:5555/api/feedback/student/${studentId}`
+          BASE_URL + `/api/feedback/student/${studentId}`
         );
         const feedback = feedbackResponse.data;
 
         // Fetch all assignment questions concurrently
         const questionsResponses = await Promise.all(
           feedback.map((fb) =>
-            axios.get(
-              `http://localhost:5555/api/feedback/assignments/${fb.assignmentId}`
-            )
+            axios.get(BASE_URL + `/api/feedback/assignments/${fb.assignmentId}`)
           )
         );
 
