@@ -17,9 +17,7 @@ const AssignmentSubmission = () => {
       try {
         const response = await axios.get(
           `${BASE_URL}/api/assignments/${assignmentId}`,
-          {
-            withCredentials: true,
-          }
+          { withCredentials: true }
         );
         setAssignment(response.data);
         setCreatedBy(response.data.createdBy);
@@ -50,7 +48,6 @@ const AssignmentSubmission = () => {
 
     setFile(selectedFile);
 
-    // Convert file to Base64
     const reader = new FileReader();
     reader.readAsDataURL(selectedFile);
     reader.onload = () => {
@@ -73,11 +70,13 @@ const AssignmentSubmission = () => {
     const submissionData = {
       assignmentId,
       createdBy,
-      file: base64File, // Base64 string
+      file: base64File,
     };
 
     try {
       // Step 1: Submit the assignment
+      alert("Please wait while your assignment is being submitted...");
+
       const uploadRes = await axios.post(
         `${BASE_URL}/api/submissions/upload`,
         submissionData,
@@ -88,16 +87,23 @@ const AssignmentSubmission = () => {
       );
 
       console.log("Assignment submitted:", uploadRes.data);
-      alert("Assignment submitted successfully!");
 
-      // Step 2: Get submissionId using assignmentId
+      // Ask user to confirm before starting analysis
+      const confirmed = window.confirm(
+        "✅ Assignment submitted successfully!\n\nClick OK to start analysis."
+      );
+
+      if (!confirmed) return;
+
+      // Step 2: Get submissionId
+      alert("Analyzing assignment... please wait.");
+
       const submissionIdRes = await axios.get(
         `${BASE_URL}/api/submissions/getSubmissionId/${assignmentId}`,
         { withCredentials: true }
       );
 
       const submissionId = submissionIdRes.data.submissionId;
-      console.log("Retrieved Submission ID:", submissionId);
 
       if (!submissionId) {
         alert("Failed to retrieve submission ID.");
@@ -115,10 +121,19 @@ const AssignmentSubmission = () => {
       );
 
       console.log("Assignment analysis response:", analyzeRes.data);
-      alert("Assignment analyzed successfully!");
+      alert("🎉 Assignment analyzed successfully!");
     } catch (error) {
       console.error("Error:", error);
-      alert("Something went wrong. Please try again.");
+
+      if (
+        error.response &&
+        error.response.status === 409 &&
+        error.response.data?.message
+      ) {
+        alert(`⚠️ ${error.response.data.message}`); // Show "You have already submitted this assignment."
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -128,9 +143,9 @@ const AssignmentSubmission = () => {
 
   return (
     <div className="p-6 max-w-5xl mx-auto border rounded-lg shadow-lg my-5">
-      <h2 className="text-2xl font-semibold">{assignment.title}</h2>
-      <p className="text-gray-700">{assignment.description}</p>
-      <p className="text-red-500">
+      <h2 className="text-2xl font-semibold mb-2">{assignment.title}</h2>
+      <p className="text-gray-700 mb-1">{assignment.description}</p>
+      <p className="text-red-500 mb-4">
         Due Date: {new Date(assignment.dueDate).toLocaleDateString()}
       </p>
 
@@ -139,11 +154,11 @@ const AssignmentSubmission = () => {
           type="file"
           accept=".pdf,.png,.jpg,.jpeg"
           onChange={handleFileChange}
-          className="mb-2"
+          className="mb-4"
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition duration-200"
         >
           Submit Assignment
         </button>
