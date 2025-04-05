@@ -60,7 +60,7 @@ const NavBar = () => {
             ref={dropdownRef}
           >
             <div className="text-white font-semibold text-sm sm:text-base md:text-lg">
-              Welcome {user.name}
+              Welcome {user.name.charAt(0).toUpperCase() + user.name.slice(1)}
             </div>
             <button
               onClick={() => setIsOpen((prev) => !prev)}

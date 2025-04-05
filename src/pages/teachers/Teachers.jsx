@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const Teachers = () => {
   return (
-    <div className="px-2 py-8">
+    <div className="mx-2 my-6 md:my-32">
       <div className="flex flex-wrap justify-center gap-6">
         <Link to={"/classroomOverview"}>
           <div className="w-72 sm:w-80 md:w-96 md:mx-6 h-56 bg-gray-300 rounded-lg text-center flex items-center justify-center text-xl sm:text-2xl font-bold cursor-pointer">

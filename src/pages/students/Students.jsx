@@ -4,7 +4,7 @@ import { Link } from "react-router";
 const Students = () => {
   return (
     <div>
-      <div className="mx-2 my-10 flex flex-wrap justify-center gap-6 sm:mx-6 lg:mx-20">
+      <div className="mx-2 my-6 md:my-32 flex flex-wrap justify-center gap-6 sm:mx-6 lg:mx-20">
         <Link to={"/dashboardOverview"}>
           <div className="w-72 sm:w-80 md:w-96 md:mx-6 h-56 bg-gray-300 rounded-lg text-center flex items-center justify-center text-xl sm:text-2xl font-bold cursor-pointer">
             Dashboard Overview

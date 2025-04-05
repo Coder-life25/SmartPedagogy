@@ -8,7 +8,7 @@ const FeedbackAndScore = () => {
 
   return (
     <div>
-      <StudentFeedback studentId={user._id} />
+      <StudentFeedback studentId={user._id || user.id} />
     </div>
   );
 };

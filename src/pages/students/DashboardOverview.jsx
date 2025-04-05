@@ -9,7 +9,7 @@ const DashboardOverview = () => {
 
   return (
     <div>
-      <PerformanceGraph studentId={user._id} />
+      <PerformanceGraph studentId={user._id || user.id} />
     </div>
   );
 };
