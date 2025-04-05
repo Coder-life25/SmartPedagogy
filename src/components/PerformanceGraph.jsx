@@ -18,13 +18,14 @@ import { BASE_URL } from "../utils/constants";
 
 const PerformanceGraph = ({ studentId }) => {
   const [performanceData, setPerformanceData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 640); // Tailwind's `sm` breakpoint
+      setIsMobile(window.innerWidth < 640);
     };
-    handleResize(); // set initially
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -36,26 +37,35 @@ const PerformanceGraph = ({ studentId }) => {
           BASE_URL + `/api/performance/student/${studentId}`
         );
         setPerformanceData(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching performance data:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
   }, [studentId]);
 
-  if (!performanceData) return <p>Loading...</p>;
+  if (loading)
+    return <h2 className="text-center text-lg font-semibold">Loading...</h2>;
 
-  // Provide defaults (0) if any parameter is undefined
-  const avgAccuracy = Number(performanceData.avgAccuracy) || 0;
-  const avgCompleteness = Number(performanceData.avgCompleteness) || 0;
-  const avgCreativity = Number(performanceData.avgCreativity) || 0;
-  const avgReasoning = Number(performanceData.avgReasoning) || 0;
-  const avgWritingQuality = Number(performanceData.avgWritingQuality) || 0;
+  // Fallback to 0 if undefined
+  const avgAccuracy = Number(performanceData?.avgAccuracy) || 0;
+  const avgCompleteness = Number(performanceData?.avgCompleteness) || 0;
+  const avgCreativity = Number(performanceData?.avgCreativity) || 0;
+  const avgReasoning = Number(performanceData?.avgReasoning) || 0;
+  const avgWritingQuality = Number(performanceData?.avgWritingQuality) || 0;
   const avgInstructionFollowing =
-    Number(performanceData.avgInstructionFollowing) || 0;
+    Number(performanceData?.avgInstructionFollowing) || 0;
 
-  // Prepare data for bar chart
+  const allZero =
+    avgAccuracy === 0 &&
+    avgCompleteness === 0 &&
+    avgCreativity === 0 &&
+    avgReasoning === 0 &&
+    avgWritingQuality === 0 &&
+    avgInstructionFollowing === 0;
+
   const barData = [
     { parameter: "Accuracy", value: avgAccuracy },
     { parameter: "Completeness", value: avgCompleteness },
@@ -65,7 +75,6 @@ const PerformanceGraph = ({ studentId }) => {
     { parameter: "Instruction Following", value: avgInstructionFollowing },
   ];
 
-  // Colors for donut charts
   const COLORS = [
     "#8884d8",
     "#82ca9d",
@@ -79,7 +88,16 @@ const PerformanceGraph = ({ studentId }) => {
     <div className="p-4 bg-white rounded shadow">
       <h3 className="text-xl font-semibold mb-4">Performance Overview</h3>
 
-      {/* Bar Chart for overall performance */}
+      {allZero && (
+        <div className="mb-6 p-4 bg-yellow-100 text-yellow-800 rounded border border-yellow-300">
+          <p className="text-center font-medium">
+            You have not submitted any assignment till now. <br />
+            Submit the assignment for performance graph.
+          </p>
+        </div>
+      )}
+
+      {/* Bar Chart */}
       <div className="mb-8">
         <div className="w-full h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
@@ -103,7 +121,7 @@ const PerformanceGraph = ({ studentId }) => {
         </div>
       </div>
 
-      {/* Donut (Radial) Charts for each parameter */}
+      {/* Radial Charts */}
       <div className="">
         <h3 className="text-xl font-semibold mb-4">
           Detailed Parameter Scores
@@ -123,7 +141,7 @@ const PerformanceGraph = ({ studentId }) => {
                 innerRadius={70}
                 outerRadius={100}
                 barSize={15}
-                data={[item]} // single data point
+                data={[item]}
                 startAngle={90}
                 endAngle={-270}
               >
