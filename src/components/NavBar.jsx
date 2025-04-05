@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import { BASE_URL } from "../utils/constants";
@@ -8,17 +8,17 @@ import { removeUser } from "../utils/appSlice";
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector((store) => store.user);
+  const dropdownRef = useRef(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleLogout = async () => {
     try {
-      let res = await axios.post(
+      const res = await axios.post(
         BASE_URL + "/logout",
         {},
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       console.log(res.data);
       dispatch(removeUser());
@@ -27,6 +27,18 @@ const NavBar = () => {
       console.log(err.message);
     }
   };
+
+  // Close dropdown if click is outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <nav className="bg-gradient-to-r from-blue-900 to-blue-700 shadow-md p-4">
@@ -41,23 +53,17 @@ const NavBar = () => {
           </Link>
         </div>
 
-        {/* Search Bar */}
-        {/*<div className="w-full md:w-1/2 lg:w-2/5 px-2 md:px-4 my-2 md:my-0">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full md:hidden sm:hidden hidden px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div> */}
-
         {/* Profile Dropdown */}
         {user ? (
-          <div className="w-full sm:w-auto flex justify-end items-center gap-2  sm:mt-0 px-2 sm:px-0 relative">
+          <div
+            className="w-full sm:w-auto flex justify-end items-center gap-2 px-2 sm:px-0 relative"
+            ref={dropdownRef}
+          >
             <div className="text-white font-semibold text-sm sm:text-base md:text-lg">
               Welcome {user.name}
             </div>
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => setIsOpen((prev) => !prev)}
               className="focus:outline-none"
             >
               <img
@@ -69,16 +75,16 @@ const NavBar = () => {
 
             {/* Dropdown Menu */}
             {isOpen && (
-              <ul className="absolute right-2 top-14 sm:top-12 -mt-4 md:-mt-1  w-36 bg-white rounded-lg shadow-lg text-gray-700 p-2 space-y-2 z-50">
+              <ul className="absolute right-2 top-14 sm:top-12 w-36 bg-white rounded-lg shadow-lg text-gray-700 p-2 space-y-2 z-50">
                 <Link
-                  to={"/profile"}
+                  to="/profile"
                   className="block hover:bg-gray-200 p-2 rounded-md cursor-pointer"
                 >
                   Profile
                 </Link>
                 <li
-                  className="hover:bg-red-500 hover:text-white p-2 rounded-md cursor-pointer"
                   onClick={handleLogout}
+                  className="hover:bg-red-500 hover:text-white p-2 rounded-md cursor-pointer"
                 >
                   Logout
                 </li>

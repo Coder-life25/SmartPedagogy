@@ -19,7 +19,7 @@ const FeedbackInsights = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          BASE_URL + `/api/teacher/feedback-insights/${user._id}`
+          BASE_URL + `/api/teacher/feedback-insights/${user._id || user.id}`
         );
         setAssignments(response.data.data.assignments);
         setLoading(false);
