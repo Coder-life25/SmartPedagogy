@@ -21,7 +21,7 @@ const Signup = () => {
         { withCredentials: true }
       );
       console.log(res.data.user);
-      dispatch(addUser(res.data.user));
+      dispatch(addUser(res.data[1].user));
       navigate("/");
     } catch (err) {
       console.log(err.message);
