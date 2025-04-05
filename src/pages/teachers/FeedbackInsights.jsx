@@ -35,7 +35,7 @@ const FeedbackInsights = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-8">
+      <h1 className="text-xl font-semibold mb-8">
         Assignment Performance Dashboard
       </h1>
 

@@ -27,27 +27,21 @@ const ClassOverview = () => {
     }
 
     const base64String = fileData.file;
-
-    // Extract MIME type (e.g., "image/jpeg" or "application/pdf")
     const mimeMatch = base64String.match(/^data:(.*?);base64,/);
     if (!mimeMatch) {
       console.error("Invalid Base64 format.");
       return;
     }
-    const mimeType = mimeMatch[1];
 
-    // Remove metadata to get pure Base64 content
+    const mimeType = mimeMatch[1];
     const base64Content = base64String.replace(/^data:.*?;base64,/, "");
 
     try {
-      // Convert Base64 to Blob
       const byteCharacters = atob(base64Content);
       const byteNumbers = new Uint8Array(byteCharacters.length).map((_, i) =>
         byteCharacters.charCodeAt(i)
       );
       const fileBlob = new Blob([byteNumbers], { type: mimeType });
-
-      // Create a temporary URL and open it in a new tab
       const fileURL = URL.createObjectURL(fileBlob);
       const newTab = window.open(fileURL, "_blank");
 
@@ -60,41 +54,42 @@ const ClassOverview = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4">
-        Class Overview - Submitted Assignments
+    <div className="max-w-7xl mx-auto px-1 sm:px-6 lg:px-8 py-6">
+      <h2 className="text-xl font-semibold mb-5">
+        Class Overview-Submitted Assignments
       </h2>
-      <table className="w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border p-2">Student Name</th>
-            <th className="border p-2">Assignment Title</th>
-            <th className="border p-2">File Name</th>
-            <th className="border p-2">Submission Date</th>
-            <th className="border p-2">View File</th>
-          </tr>
-        </thead>
-        <tbody>
-          {submittedAssignments.map((submission) => (
-            <tr key={submission._id} className="border">
-              <td className="border p-2">{submission.studentId.name}</td>
-              <td className="border p-2">{submission.assignmentId.title}</td>
-              <td className="border p-2">{submission.fileName}</td>
-              <td className="border p-2">
-                {new Date(submission.submittedAt).toLocaleDateString()}
-              </td>
-              <td className="border p-2">
-                <button
-                  onClick={() => openFileInNewTab(submission)}
-                  className="bg-green-500 text-white px-3 py-1 rounded"
-                >
-                  View File
-                </button>
-              </td>
+
+      <div className="overflow-x-auto">
+        <table className="min-w-full border-collapse border border-gray-300 text-sm sm:text-base">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border p-2">Student Name</th>
+              <th className="border p-2">Assignment Title</th>
+              <th className="border p-2">Submission Date</th>
+              <th className="border p-2">View File</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {submittedAssignments.map((submission) => (
+              <tr key={submission._id} className="border">
+                <td className="border p-2">{submission.studentId.name}</td>
+                <td className="border p-2">{submission.assignmentId.title}</td>
+                <td className="border p-2">
+                  {new Date(submission.submittedAt).toLocaleDateString()}
+                </td>
+                <td className="border p-2">
+                  <button
+                    onClick={() => openFileInNewTab(submission)}
+                    className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded transition duration-200"
+                  >
+                    View File
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
