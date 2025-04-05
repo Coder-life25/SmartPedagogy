@@ -18,6 +18,16 @@ import { BASE_URL } from "../utils/constants";
 
 const PerformanceGraph = ({ studentId }) => {
   const [performanceData, setPerformanceData] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640); // Tailwind's `sm` breakpoint
+    };
+    handleResize(); // set initially
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,23 +81,30 @@ const PerformanceGraph = ({ studentId }) => {
 
       {/* Bar Chart for overall performance */}
       <div className="mb-8">
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart
-            data={barData}
-            margin={{ top: 20, right: 20, left: 0, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="parameter" />
-            <YAxis domain={[0, 100]} />
-            <BarTooltip formatter={(value) => `${value.toFixed(2)}%`} />
-            <Legend />
-            <Bar dataKey="value" fill="#8884d8" name="Average Score" />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className="w-full h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={barData}
+              margin={{ top: 20, right: 20, left: 0, bottom: 40 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="parameter"
+                angle={isMobile ? -45 : 0}
+                textAnchor={isMobile ? "end" : "middle"}
+                interval={0}
+              />
+              <YAxis domain={[0, 100]} />
+              <BarTooltip formatter={(value) => `${value.toFixed(2)}%`} />
+              <Legend />
+              <Bar dataKey="value" fill="#8884d8" name="Average Score" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Donut (Radial) Charts for each parameter */}
-      <div>
+      <div className="">
         <h3 className="text-xl font-semibold mb-4">
           Detailed Parameter Scores
         </h3>

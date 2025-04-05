@@ -10,33 +10,41 @@ import {
 } from "recharts";
 import { BASE_URL } from "../utils/constants";
 
+// Hook to get screen width
+const useWindowWidth = () => {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  return width;
+};
+
 const StudentFeedback = ({ studentId }) => {
   const [feedbackData, setFeedbackData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [expandedIndex, setExpandedIndex] = useState(null); // Track expanded feedback
+  const [expandedIndex, setExpandedIndex] = useState(null);
+
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth < 640; // Tailwind's "sm" breakpoint
 
   useEffect(() => {
     const fetchFeedbackAndQuestions = async () => {
       try {
-        // Fetch feedback data
         const feedbackResponse = await axios.get(
           BASE_URL + `/api/feedback/student/${studentId}`
         );
         const feedback = feedbackResponse.data;
 
-        // Fetch all assignment questions concurrently
         const questionsResponses = await Promise.all(
           feedback.map((fb) =>
             axios.get(BASE_URL + `/api/feedback/assignments/${fb.assignmentId}`)
           )
         );
 
-        // Extract data from each response
-        const questionsData = questionsResponses.map(
-          (response) => response.data
-        );
+        const questionsData = questionsResponses.map((res) => res.data);
 
-        // Combine questions with their corresponding feedback
         const combinedData = feedback.map((fb, index) => ({
           questionText: questionsData[index].title,
           feedback: fb,
@@ -69,20 +77,11 @@ const StudentFeedback = ({ studentId }) => {
       {feedbackData.map((item, index) => {
         const isExpanded = expandedIndex === index;
         const evaluationScores = [
-          {
-            name: "Completeness",
-            score: parseFloat(item.feedback.completeness),
-          },
+          { name: "Completeness", score: parseFloat(item.feedback.completeness) },
           { name: "Accuracy", score: parseFloat(item.feedback.accuracy) },
-          {
-            name: "Instruction Following",
-            score: parseFloat(item.feedback.instructionFollowing),
-          },
+          { name: "Instruction Following", score: parseFloat(item.feedback.instructionFollowing) },
           { name: "Creativity", score: parseFloat(item.feedback.creativity) },
-          {
-            name: "Writing Quality",
-            score: parseFloat(item.feedback.writingQuality),
-          },
+          { name: "Writing Quality", score: parseFloat(item.feedback.writingQuality) },
           { name: "Reasoning", score: parseFloat(item.feedback.reasoning) },
         ];
 
@@ -102,11 +101,18 @@ const StudentFeedback = ({ studentId }) => {
 
             {isExpanded && (
               <div>
-                {/* Bar Chart Visualization */}
+                {/* Bar Chart */}
                 <div className="mt-4">
                   <ResponsiveContainer width="100%" height={250}>
                     <BarChart data={evaluationScores}>
-                      <XAxis dataKey="name" stroke="#555" />
+                      <XAxis
+                        dataKey="name"
+                        stroke="#555"
+                        angle={isMobile ? -45 : 0}
+                        textAnchor={isMobile ? "end" : "middle"}
+                        interval={0}
+                        height={isMobile ? 80 : 30}
+                      />
                       <YAxis domain={[0, 100]} />
                       <Tooltip />
                       <Bar

@@ -30,33 +30,31 @@ const NavBar = () => {
 
   return (
     <nav className="bg-gradient-to-r from-blue-900 to-blue-700 shadow-md p-4">
-      <div className="container mx-auto flex items-center justify-between ml-2">
+      <div className="container mx-auto flex flex-wrap items-center justify-between">
         {/* Logo / Brand Name */}
-        {user ? (
-          <Link to={"/"} className="text-white text-2xl font-bold w-1/4">
+        <div className="w-full sm:w-auto flex justify-between items-center mb-2 sm:mb-0 px-2 sm:px-0">
+          <Link
+            to={user ? "/" : "/login"}
+            className="text-white text-2xl font-bold"
+          >
             SmartPedagogy
           </Link>
-        ) : (
-          <Link to={"/login"} className="text-white text-2xl font-bold w-1/4">
-            SmartPedagogy
-          </Link>
-        )}
+        </div>
 
         {/* Search Bar */}
-        <div className="hidden md:block w-4/5 mx-10">
+        {/*<div className="w-full md:w-1/2 lg:w-2/5 px-2 md:px-4 my-2 md:my-0">
           <input
-            c
             type="text"
             placeholder="Search..."
-            className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 w-full"
+            className="w-full md:hidden sm:hidden hidden px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-        </div>
+        </div> */}
 
         {/* Profile Dropdown */}
         {user ? (
-          <div className="relative w-1/2 flex justify-end ">
-            <div className="text-white font-bold text-xl mx-4">
-              welcome {user.name}{" "}
+          <div className="w-full sm:w-auto flex justify-end items-center gap-2  sm:mt-0 px-2 sm:px-0 relative">
+            <div className="text-white font-semibold text-sm sm:text-base md:text-lg">
+              Welcome {user.name}
             </div>
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -65,22 +63,19 @@ const NavBar = () => {
               <img
                 src={user.profilePic}
                 alt="User Avatar"
-                className="w-10 h-10 rounded-full border-2 border-white"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-white"
               />
             </button>
 
             {/* Dropdown Menu */}
             {isOpen && (
-              <ul className="absolute right-0 mt-9 w-40 bg-white rounded-lg shadow-lg text-gray-700 p-2 space-y-2">
+              <ul className="absolute right-2 top-14 sm:top-12 -mt-4 md:-mt-1  w-36 bg-white rounded-lg shadow-lg text-gray-700 p-2 space-y-2 z-50">
                 <Link
                   to={"/profile"}
-                  className="hover:bg-gray-200 p-2 rounded-md cursor-pointer"
+                  className="block hover:bg-gray-200 p-2 rounded-md cursor-pointer"
                 >
                   Profile
                 </Link>
-                <li className="hover:bg-gray-200 p-2 rounded-md cursor-pointer">
-                  Settings
-                </li>
                 <li
                   className="hover:bg-red-500 hover:text-white p-2 rounded-md cursor-pointer"
                   onClick={handleLogout}
