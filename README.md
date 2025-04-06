@@ -1,11 +1,11 @@
 # Backend Github Repo Link
 
 ```
-- **Link** - https://github.com/Coder-life25/smartpedagogy-backend-
+Link :- https://github.com/Coder-life25/smartpedagogy-backend-
 
 ```
----
 
+---
 
 # 📘 SmartPedagogy Frontend
 
