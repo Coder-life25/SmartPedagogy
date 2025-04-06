@@ -1,3 +1,12 @@
+# Backend Github Repo Link
+
+```
+- **Link** - https://github.com/Coder-life25/smartpedagogy-backend-
+
+```
+---
+
+
 # 📘 SmartPedagogy Frontend
 
 SmartPedagogy is a modern web-based platform designed to simplify assignment creation, submission, and evaluation using AI technologies. This **frontend** project is built using **React.js**, **Tailwind CSS**, and integrates tightly with the backend API to support both teacher and student dashboards.
